@@ -16,15 +16,32 @@ class App {
     this.middlewares();
     this.routes();
 
-    app.listen(3001, () =>
+    app.listen(8000, () =>
       console.log(`
-      API funcionando na porta 3001
+      API rodando na porta 8000
                     
-      http://localhost:3001`)
+      http://localhost:8000`)
     );
 
     app.get('/', function (req, res) {
-      res.send('hello world')
+      res.send(`
+      <!DOCTYPE html>
+      <html lang="pt-br">
+      <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>API</title>
+      </head>
+      <body>
+          <h1>API rodando com sucesso!</h1>
+          <ul>
+            <li><a href="/foods">Produtos</a></li>
+            <li><a href="/clients">Clientes</a></li>
+          </ul>
+      </body>
+      </html>
+      `)
     })
   }
 
