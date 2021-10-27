@@ -22,6 +22,10 @@ class App {
                     
       http://localhost:3001`)
     );
+
+    app.get('/', function (req, res) {
+      res.send('hello world')
+    })
   }
 
   database() {
