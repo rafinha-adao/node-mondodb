@@ -21,13 +21,13 @@ class FoodController {
     }
 
     async update(req, res) {
-        const data = await Food.updateOne(req.body);
+        const data = await Food.updateOne(req.params.id);
 
         return res.json(data);
     }
 
     async destroy(req, res) {
-        const data = await Food.remove({});
+        const data = await Food.remove(req.params.id);
 
         return res.json(data);
     }
