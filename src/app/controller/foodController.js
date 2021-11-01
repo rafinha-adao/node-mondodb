@@ -9,9 +9,15 @@ class FoodController {
     }  
 
     async show(req, res) {
-        const data = await Food.findById(req.params.id);
+        
+        try {
+            const data = await Food.findById({ _id: req.params.id });
+            res.send(data);
 
-        return res.json(data);
+        } catch {
+            res.status(404);
+            res.send({ error: "Produto não existe" });
+        }
     }
 
     async store(req, res) {
@@ -21,15 +27,41 @@ class FoodController {
     }
 
     async update(req, res) {
-        const data = await Food.updateOne(req.params.id);
+        try {
+            const data = await Food.findOne({ _id: req.params.id });
 
-        return res.json(data);
+            if (req.body.img) {
+                data.img = req.body.img
+            }
+            if (req.body.name) {
+                data.name = req.body.name
+            }
+            if (req.body.price) {
+                data.price = req.body.price
+            }
+            if (req.body.amount) {
+                data.amount = req.body.amount
+            }
+
+            await data.save();
+            res.send(data);
+            //return res.json(data);
+
+        } catch {
+            res.status(404);
+            res.send({ error: "Produto não existe" });
+        }
     }
 
     async destroy(req, res) {
-        const data = await Food.remove(req.params.id);
+        try {
+            await Food.deleteOne({ _id: req.params.id })
+            res.status(204).send();
 
-        return res.json(data);
+        } catch {
+            res.status(404);
+            res.send({ error: "Produto não existe" });
+        }
     }
 }
 
