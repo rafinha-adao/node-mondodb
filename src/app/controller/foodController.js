@@ -9,7 +9,6 @@ class FoodController {
     }  
 
     async show(req, res) {
-        
         try {
             const data = await Food.findById({ _id: req.params.id });
             res.send(data);
@@ -27,30 +26,24 @@ class FoodController {
     }
 
     async update(req, res) {
-        try {
-            const data = await Food.findOne({ _id: req.params.id });
-
-            if (req.body.img) {
-                data.img = req.body.img
-            }
-            if (req.body.name) {
-                data.name = req.body.name
-            }
-            if (req.body.price) {
-                data.price = req.body.price
-            }
-            if (req.body.amount) {
-                data.amount = req.body.amount
-            }
-
-            await data.save();
-            res.send(data);
-            //return res.json(data);
-
-        } catch {
-            res.status(404);
-            res.send({ error: "Produto não existe" });
+        if (!req.body) {
+            return res.status(400).send({
+                message: "Erro na atualização"
+            });
         }
+        Food.findByIdAndUpdate({ _id: req.params.id }, req.body, { useFindAndModify: false })        
+            .then(data => {
+            if (!data) {
+                res.status(404).send({
+                message: `Não foi possível atualizar o produto com id=${id}`
+                });
+            } else res.send({ message: "Produto atualizado com sucesso" });
+            })
+            .catch(err => {
+            res.status(500).send({
+                message: `Não foi possível atualizar o produto com id=${id}`
+            });
+        });
     }
 
     async destroy(req, res) {
